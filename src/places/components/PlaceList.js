@@ -5,13 +5,15 @@ import PlaceItem from './PlaceItem';
 
 import style from './PlaceList.module.css';
 
+import Button from '../../shared/components/FormElements/Buttons';
+
 const PlaceList = (props) => {
   if (props.items.length === 0) {
     return (
       <div className={`${style['place-list']} center`}>
         <Card>
           <h2>No places found. Maybe create one?</h2>
-          <button>Share Place</button>
+          <Button>Share Place</Button>
         </Card>
       </div>
     );
