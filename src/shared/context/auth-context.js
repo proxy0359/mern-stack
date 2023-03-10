@@ -7,15 +7,15 @@ export const authContext = createContext({
 });
 
 export const AuthContextProvider = (props) => {
-  const [isLoggedIn, setIsLoggedIn] = useState();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const login = useCallback(() => {
     setIsLoggedIn(true);
-  }, []);
+  }, [setIsLoggedIn]);
 
   const logout = useCallback(() => {
     setIsLoggedIn(false);
-  }, []);
+  }, [setIsLoggedIn]);
 
   const value = { isLoggedIn, logout, login };
 
