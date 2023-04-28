@@ -1,0 +1,10 @@
+svg {
+  width: 100px;
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
