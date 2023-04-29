@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import UserLists from '../components/UserLists';
+import { getUser } from '../../api/getUser';
 
 const Users = () => {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const response = async () => {
+      const data = await getUser();
+      console.log(data);
+      setUsers(data);
+    };
+    response();
+  }, [setUsers]);
   const USERS = [
     {
       id: 'u1',
@@ -11,7 +22,7 @@ const Users = () => {
       places: 3,
     },
   ];
-  return <UserLists items={USERS} />;
+  return <UserLists items={users} />;
 };
 
 export default Users;
