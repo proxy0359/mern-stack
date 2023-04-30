@@ -58,8 +58,6 @@ const UpdatePlace = () => {
     setIsLoading(false);
   }, [setFormData, identifiedPlace, setIsLoading]);
 
-  console.log(formState);
-
   if (!identifiedPlace) {
     return (
       <div className="center">
@@ -76,14 +74,8 @@ const UpdatePlace = () => {
     );
   }
 
-  console.log(formState.inputs.description.isValid);
-
-  console.log(formState.inputs.description.isValid);
-
   const updatePlaceHandler = (event) => {
     event.preventDefault();
-
-    console.log(formState.inputs.description.isValid);
   };
 
   return (

@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PlaceList from '../components/PlaceList';
 import { useParams } from 'react-router-dom';
+import { getUserPlace } from '../../api/getUserPlaces';
+
+import { userContext } from '../../shared/context/user-context';
 
 const DUMMY_PLACES = [
   {
@@ -24,11 +27,19 @@ const DUMMY_PLACES = [
 ];
 
 const UserPlaces = () => {
-  const id = useParams().userId;
+  const [userPlaces, setUserPlaces] = useState([]);
+  const userId = useContext(userContext).id;
 
-  const loadedPlaces = DUMMY_PLACES.filter((item) => item.creator === id);
+  useEffect(() => {
+    const getPlaces = async () => {
+      const response = await getUserPlace(userId);
 
-  return <PlaceList items={loadedPlaces} />;
+      setUserPlaces(response);
+    };
+    getPlaces();
+  }, [setUserPlaces, userId]);
+
+  return <PlaceList items={userPlaces} />;
 };
 
 export default UserPlaces;

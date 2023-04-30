@@ -2,9 +2,11 @@ import React, { useContext } from 'react';
 import style from './NavLinks.module.css';
 import { NavLink } from 'react-router-dom';
 import { authContext } from '../../context/auth-context';
+import { userContext } from '../../context/user-context';
 
 const NavLinks = (props) => {
   const authCtx = useContext(authContext);
+  const userCtx = useContext(userContext);
 
   return (
     <ul className={`${style['nav-links']}`}>
@@ -35,7 +37,7 @@ const NavLinks = (props) => {
         <>
           <li onClick={props.onClick}>
             <NavLink
-              to="/u1/places"
+              to={`/${userCtx.id}/places`}
               className={({ isActive }) =>
                 isActive ? style.active : undefined
               }

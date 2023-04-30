@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import UserLists from '../components/UserLists';
 import { getUser } from '../../api/getUser';
+import Spinner from '../../shared/components/loading/Spinner';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const response = async () => {
@@ -13,16 +15,8 @@ const Users = () => {
     };
     response();
   }, [setUsers]);
-  const USERS = [
-    {
-      id: 'u1',
-      name: 'Kiluwamata',
-      image:
-        'https://i.pinimg.com/236x/8c/06/f4/8c06f47ba352178544e2f86df6161a61--business-headshots-corporate-headshots.jpg',
-      places: 3,
-    },
-  ];
-  return <UserLists items={users} />;
+
+  return users ? <UserLists items={users} /> : <Spinner />;
 };
 
 export default Users;

@@ -19,11 +19,13 @@ import api from '../../api/server';
 import Spinner from '../../shared/components/loading/Spinner';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import { useHttpRequest } from '../../shared/hooks/httpRequestHook';
+import { userContext } from '../../shared/context/user-context';
 
 const Auth = () => {
   const [isLoggedInMode, setIsLoggedInMode] = useState(true);
 
   const authCtx = useContext(authContext);
+  const userCtx = useContext(userContext);
 
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -33,10 +35,10 @@ const Auth = () => {
     false
   );
 
+  // HTTP REQUEST HOOK
   const { isLoading, error, errorReset, sendRequest } = useHttpRequest();
 
   const navigate = useNavigate();
-  const { userId } = useParams();
 
   const switchModeHandler = () => {
     if (!isLoggedInMode) {
@@ -64,11 +66,27 @@ const Auth = () => {
     }
 
     if (isLoggedInMode) {
-      sendRequest('/api/users/login', api.post, { password, email });
-      authCtx.login();
-      navigate('/u1/places');
+      try {
+        const response = await sendRequest('/api/users/login', api.post, {
+          password,
+          email,
+        });
+        authCtx.login();
+        userCtx.setUserId(response);
+        navigate(`/${response}/places `);
+      } catch (err) {
+        console.log(err.response.data.message);
+      }
     } else {
-      sendRequest('/api/users/signup', api.post, { email, name, password });
+      try {
+        await sendRequest('/api/users/signup', api.post, {
+          email,
+          name,
+          password,
+        });
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 

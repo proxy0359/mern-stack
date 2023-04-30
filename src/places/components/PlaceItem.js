@@ -15,7 +15,6 @@ const PlaceItem = (props) => {
 
   const deleteHandler = () => {
     setShowDeleteModal((modal) => !modal);
-    console.log('Deleted');
   };
 
   return (

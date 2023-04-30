@@ -10,7 +10,6 @@ const MainNavigation = () => {
   const [showDrawer, setShowDrawer] = useState(false);
 
   const drawerHandler = () => {
-    console.log('run');
     setShowDrawer((drawer) => !drawer);
   };
 

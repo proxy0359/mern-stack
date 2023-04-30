@@ -14,6 +14,7 @@ import NewPlace from './places/pages/NewPlace';
 import UpdatePlace from './places/pages/UpdatePlace';
 import Auth from './user/pages/Auth';
 import { authContext } from './shared/context/auth-context';
+import PageNotFound from './shared/page/PageNotFound';
 
 function App() {
   const isLoggedIn = useContext(authContext).isLoggedIn;
@@ -34,12 +35,10 @@ function App() {
 
         {!isLoggedIn ? <Route path="/auth" element={<Auth />} /> : null}
 
-        <Route path="*" element={<Navigate to={'/'} />} />
+        <Route path="*" element={<PageNotFound />} />
       </Route>
     )
   );
-
-  console.log('rendered');
 
   return <RouterProvider router={router} />;
 }
