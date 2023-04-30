@@ -16,18 +16,18 @@ export const useHttpRequest = () => {
       const data = await response.data;
       userId = data.user;
 
+      activeHttpReq.current = activeHttpReq.current.filter(
+        (abortController) => abortController !== abortCtrl
+      );
+
+      setIsLoading(false);
+
       return data.user;
     } catch (err) {
       setIsLoading(false);
       setError(err.response.data.message);
       throw err;
     }
-
-    activeHttpReq = activeHttpReq.current.filter(
-      (abortController) => abortController !== abortCtrl
-    );
-
-    setIsLoading(false);
   }, []);
 
   const errorReset = () => {
