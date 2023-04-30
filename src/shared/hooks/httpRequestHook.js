@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 export const useHttpRequest = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  let userId;
 
   const activeHttpReq = useRef([]);
   const sendRequest = useCallback(async (url, method, body = {}) => {
