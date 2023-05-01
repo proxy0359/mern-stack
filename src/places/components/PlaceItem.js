@@ -4,22 +4,47 @@ import Card from '../../shared/components/UIElements/Card';
 import Button from '../../shared/components/FormElements/Buttons';
 import Modal from '../../shared/components/UIElements/Modal';
 import Map from '../../shared/components/UIElements/Map';
+import { useHttpRequest } from '../../shared/hooks/httpRequestHook';
+import api from './../../api/server';
+import Spinner from '../../shared/components/loading/Spinner';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 
 const PlaceItem = (props) => {
   const [showMap, setShowMap] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const mapHandler = () => setShowMap((show) => !show);
 
   const deleteModalHandler = () => setShowDeleteModal((modal) => !modal);
 
-  const deleteHandler = () => {
-    setShowDeleteModal((modal) => !modal);
+  const { isLoading, error, errorReset, sendRequest } = useHttpRequest();
+
+  // DELETE PLACE HANDLER
+  const deleteHandler = async () => {
+    try {
+      const response = await sendRequest(`/api/places/${props.id}`, api.delete);
+      console.log(response);
+
+      setIsSubmitted(true);
+      setTimeout(() => {
+        setShowDeleteModal((modal) => !modal);
+        setIsSubmitted(false);
+      }, 5000);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <>
+      {/* ERROR MODAL */}
+      <ErrorModal show={error} onCancel={errorReset}>
+        {error}
+      </ErrorModal>
+
       {/* MAP MODAL */}
+
       <Modal
         show={showMap}
         onCancel={mapHandler}
@@ -36,17 +61,35 @@ const PlaceItem = (props) => {
       {/* DELETE MODAL */}
       <Modal
         show={showDeleteModal}
-        header="Are you sure?"
+        header={
+          isSubmitted ? (
+            <p className="success-alert text-center"> Deleted Successfully!</p>
+          ) : (
+            'Are you sure?'
+          )
+        }
         footerClass={style['place-item__modal-actions']}
         footer={
-          <>
-            <Button inverse onClick={deleteModalHandler}>
-              CANCEL
-            </Button>
-            <Button danger onClick={deleteHandler}>
-              DELETE
-            </Button>
-          </>
+          isLoading ? (
+            <Spinner />
+          ) : (
+            <>
+              <Button
+                inverse
+                onClick={deleteModalHandler}
+                disabled={isSubmitted || isLoading}
+              >
+                CANCEL
+              </Button>
+              <Button
+                danger
+                onClick={deleteHandler}
+                disabled={isSubmitted || isLoading}
+              >
+                DELETE
+              </Button>
+            </>
+          )
         }
       >
         <p>
