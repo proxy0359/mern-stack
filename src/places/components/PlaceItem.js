@@ -68,10 +68,14 @@ const PlaceItem = (props) => {
           </div>
 
           <div className={style['place-item__actions']}>
+            {/* VIEW MAP VIA SATELITE */}
             <Button inverse onClick={mapHandler}>
               VIEW ON MAP
             </Button>
+            {/* EDIT PLACE */}
             <Button to={`/places/${props.id}`}>EDIT</Button>
+
+            {/* DELETE PLACE */}
             <Button danger onClick={deleteModalHandler}>
               DELETE
             </Button>

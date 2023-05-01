@@ -5,7 +5,6 @@ import Spinner from '../../shared/components/loading/Spinner';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const response = async () => {

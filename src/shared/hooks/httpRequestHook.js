@@ -25,7 +25,7 @@ export const useHttpRequest = () => {
       return data.user;
     } catch (err) {
       setIsLoading(false);
-      setError(err.response.data.message);
+      setError(err || 'there is something wrong send request');
       throw err;
     }
   }, []);

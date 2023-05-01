@@ -24,12 +24,12 @@ const Input = (props) => {
     isTouched: false,
   });
 
-  const { onChange, id } = props;
+  const { onChange, id, initialValue } = props;
   const { value, isValid } = inputState;
 
   useEffect(() => {
     onChange(id, value, isValid);
-  }, [onchange, id, value, isValid]);
+  }, [onchange, id, value, isValid, initialValue]);
 
   const changeHandler = (event) => {
     dispatch({
