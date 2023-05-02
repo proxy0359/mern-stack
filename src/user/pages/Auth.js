@@ -20,6 +20,7 @@ import Spinner from '../../shared/components/loading/Spinner';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import { useHttpRequest } from '../../shared/hooks/httpRequestHook';
 import { userContext } from '../../shared/context/user-context';
+import UploadImage from '../components/UploadImage';
 
 const Auth = () => {
   const [isLoggedInMode, setIsLoggedInMode] = useState(true);
@@ -104,15 +105,23 @@ const Auth = () => {
         <form onSubmit={loginSubmitHandler}>
           {/* NAME INPUT */}
           {!isLoading && !isLoggedInMode && (
-            <Input
-              element="input"
-              id="name"
-              type="text"
-              label="Username"
-              validators={[VALIDATOR_REQUIRE()]}
-              errorText="Please enter a name."
-              onChange={inputHandler}
-            />
+            <>
+              <UploadImage
+                id="image"
+                center
+                onPicked={inputHandler}
+                errorText="Invalid Image"
+              />
+              <Input
+                element="input"
+                id="name"
+                type="text"
+                label="Username"
+                validators={[VALIDATOR_REQUIRE()]}
+                errorText="Please enter a name."
+                onChange={inputHandler}
+              />
+            </>
           )}
 
           {isLoading ? (
