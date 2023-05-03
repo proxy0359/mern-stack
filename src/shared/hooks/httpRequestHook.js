@@ -6,13 +6,18 @@ export const useHttpRequest = () => {
   let userId;
 
   let activeHttpReq = useRef([]);
-  const sendRequest = useCallback(async (url, method, body = {}) => {
+  const sendRequest = useCallback(async (url, method, body = {}, headers) => {
     setIsLoading(true);
     const abortCtrl = new AbortController();
     activeHttpReq.current.push(abortCtrl);
 
     try {
-      const response = await method(url, { ...body, signal: abortCtrl.signal });
+      const response = await method(
+        url,
+        body,
+
+        { signal: abortCtrl.signal }
+      );
       const data = await response.data;
       userId = data.user;
 

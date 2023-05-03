@@ -21,6 +21,7 @@ import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import { useHttpRequest } from '../../shared/hooks/httpRequestHook';
 import { userContext } from '../../shared/context/user-context';
 import UploadImage from '../components/UploadImage';
+import { v1 } from 'uuid';
 
 const Auth = () => {
   const [isLoggedInMode, setIsLoggedInMode] = useState(true);
@@ -44,12 +45,17 @@ const Auth = () => {
   const switchModeHandler = () => {
     if (!isLoggedInMode) {
       setFormData(
-        { ...formState.inputs, name: undefined },
+        { ...formState.inputs, name: '', image: undefined, email: '' },
         formState.inputs.email.isValid && formState.inputs.password.isValid
       );
     } else {
       setFormData(
-        { ...formState.inputs, name: { value: '', isValid: false } },
+        {
+          ...formState.inputs,
+          name: { value: '', isValid: false },
+          image: { value: null, isValid: false },
+          email: { value: '', isValid: false },
+        },
         false
       );
     }
@@ -60,11 +66,6 @@ const Auth = () => {
     event.preventDefault();
     const email = formState.inputs.email.value;
     const password = formState.inputs.password.value;
-    let name;
-
-    if (!isLoggedInMode) {
-      name = formState.inputs.name.value;
-    }
 
     if (isLoggedInMode) {
       try {
@@ -74,17 +75,31 @@ const Auth = () => {
         });
         authCtx.login();
         userCtx.setUserId(response);
-        navigate(`/${response}/places `);
+        navigate(`/${response}/places`);
       } catch (err) {
         console.log(err.response.data.message);
       }
     } else {
+      const formData = new FormData();
+
+      formData.append('email', formState.inputs.email.value);
+      formData.append('password', formState.inputs.password.value);
+      formData.append(
+        'img',
+        formState.inputs.image.value,
+        `${v1()}-${formState.inputs.image.value.name}`
+      );
+      formData.append('name', formState.inputs.name.value);
+
+      console.log(formData);
+
       try {
-        await sendRequest('/api/users/signup', api.post, {
-          email,
-          name,
-          password,
-        });
+        await sendRequest(
+          '/api/users/signup',
+          api.post,
+
+          formData
+        );
       } catch (err) {
         console.log(err);
       }

@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Button from '../../shared/components/FormElements/Buttons';
+import { v1 } from 'uuid';
 
 const UploadImage = (props) => {
   const [file, setFile] = useState();
   const [previewUrl, setPreviewUrl] = useState();
-  const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(true);
   const selectFileRef = useRef();
 
   useEffect(() => {
@@ -15,18 +16,16 @@ const UploadImage = (props) => {
     const fileReader = new FileReader();
     fileReader.onloadend = () => {
       setPreviewUrl(fileReader.result);
-      console.log(fileReader);
     };
     fileReader.readAsDataURL(file);
   }, [file]);
-
-  console.log(previewUrl);
 
   const filePickedHandler = (e) => {
     let pickedFile;
     let fileIsValid = isValid;
     if (e.target.files && e.target.files.length === 1) {
       pickedFile = e.target.files[0];
+
       setFile(pickedFile);
       setIsValid(true);
       fileIsValid = true;
