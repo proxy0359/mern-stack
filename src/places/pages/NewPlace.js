@@ -16,6 +16,8 @@ import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 
 import api from '../../api/server';
 import { userContext } from '../../shared/context/user-context';
+import UploadImage from '../../user/components/UploadImage';
+import { v1 } from 'uuid';
 
 const NewPlace = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -38,14 +40,20 @@ const NewPlace = () => {
     const title = inputState.inputs.title.value;
     const description = inputState.inputs.description.value;
     const address = inputState.inputs.address.value;
+    console.log(inputState);
+    const image = inputState.inputs.image.value;
+
+    const formData = new FormData();
+
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('address', address);
+    formData.append('img', image, `${v1()}-${image.name}`);
+    formData.append('creator', userCtx.id);
 
     try {
-      const response = await sendRequest('/api/places', api.post, {
-        title,
-        description,
-        address,
-        creator: userCtx.id,
-      });
+      const response = await sendRequest('/api/places', api.post, formData);
+      console.log(response);
 
       setIsSubmitted(true);
       setTimeout(() => {
@@ -71,6 +79,11 @@ const NewPlace = () => {
                 Created place successful!
               </p>
             ) : null}
+
+            <div className="center">
+              <UploadImage center onPicked={InputHandler} id="image" />
+            </div>
+
             <Input
               id="title"
               type="text"

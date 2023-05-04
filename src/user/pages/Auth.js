@@ -29,7 +29,7 @@ const Auth = () => {
   const authCtx = useContext(authContext);
   const userCtx = useContext(userContext);
 
-  const [formState, inputHandler, setFormData] = useForm(
+  const [formState, InputHandler, setFormData] = useForm(
     {
       email: { value: '', isValid: false },
       password: { value: '', isValid: false },
@@ -124,7 +124,7 @@ const Auth = () => {
               <UploadImage
                 id="image"
                 center
-                onPicked={inputHandler}
+                onPicked={InputHandler}
                 errorText="Invalid Image"
               />
               <Input
@@ -134,7 +134,7 @@ const Auth = () => {
                 label="Username"
                 validators={[VALIDATOR_REQUIRE()]}
                 errorText="Please enter a name."
-                onChange={inputHandler}
+                onChange={InputHandler}
               />
             </>
           )}
@@ -150,7 +150,7 @@ const Auth = () => {
                 label="E-Mail"
                 validators={[VALIDATOR_EMAIL()]}
                 errorText="Please enter a valid email address."
-                onChange={inputHandler}
+                onChange={InputHandler}
               />
               <Input
                 id="password"
@@ -159,7 +159,7 @@ const Auth = () => {
                 label="Password"
                 validators={[VALIDATOR_MINLENGTH(7)]}
                 errorText=" Please enter a valid password (min. 7 char) "
-                onChange={inputHandler}
+                onChange={InputHandler}
               />
             </>
           )}
