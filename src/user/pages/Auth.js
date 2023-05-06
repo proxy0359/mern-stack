@@ -68,18 +68,25 @@ const Auth = () => {
     const password = formState.inputs.password.value;
 
     if (isLoggedInMode) {
+      // LOG IN LOGIC
       try {
         const response = await sendRequest('/api/users/login', api.post, {
           password,
           email,
         });
+
+        console.log(response);
+        userCtx.getToken(response.token);
+
         authCtx.login();
-        userCtx.setUserId(response);
+
+        userCtx.setUserId(response.user);
         navigate(`/${response}/places`);
       } catch (err) {
         console.log(err.response.data.message);
       }
     } else {
+      // SIGN-UP LOGIC
       const formData = new FormData();
 
       formData.append('email', formState.inputs.email.value);
@@ -94,12 +101,19 @@ const Auth = () => {
       console.log(formData);
 
       try {
-        await sendRequest(
+        const response = await sendRequest(
           '/api/users/signup',
           api.post,
 
           formData
         );
+
+        userCtx.getToken(response.token);
+        userCtx.setUserId(response.userId);
+
+        authCtx.login();
+        console.log(response);
+        navigate('/');
       } catch (err) {
         console.log(err);
       }

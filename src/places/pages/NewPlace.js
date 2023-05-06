@@ -43,6 +43,8 @@ const NewPlace = () => {
     console.log(inputState);
     const image = inputState.inputs.image.value;
 
+    console.log(userCtx.id);
+
     const formData = new FormData();
 
     formData.append('title', title);
@@ -51,8 +53,12 @@ const NewPlace = () => {
     formData.append('img', image, `${v1()}-${image.name}`);
     formData.append('creator', userCtx.id);
 
+    console.log(userCtx.id);
+
     try {
-      const response = await sendRequest('/api/places', api.post, formData);
+      const response = await sendRequest('/api/places', api.post, formData, {
+        headers: { Authorization: `Bearer ${userCtx.token}` },
+      });
       console.log(response);
 
       setIsSubmitted(true);
@@ -60,7 +66,7 @@ const NewPlace = () => {
         setIsSubmitted(false);
       }, 5000);
     } catch (err) {
-      console.log(err);
+      console.log(err.response.data.message);
     }
   };
 

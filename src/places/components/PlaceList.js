@@ -8,7 +8,7 @@ import style from './PlaceList.module.css';
 import Button from '../../shared/components/FormElements/Buttons';
 
 const PlaceList = (props) => {
-  if (props.items.length === 0) {
+  if (props.items.length === 0 || !props.items) {
     return (
       <div className={`${style['place-list']} center`}>
         <Card>

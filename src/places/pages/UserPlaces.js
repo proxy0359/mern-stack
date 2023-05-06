@@ -4,23 +4,39 @@ import { getUserPlace } from '../../api/getUserPlaces';
 
 import { userContext } from '../../shared/context/user-context';
 import { useParams } from 'react-router-dom';
+import { useHttpRequest } from '../../shared/hooks/httpRequestHook';
+
+import api from '../../api/server';
 
 const UserPlaces = () => {
-  const [userPlaces, setUserPlaces] = useState([]);
-  const userId = useContext(userContext).id;
-  const uId = useParams().userId;
+  const [userPlaces, setUserPlaces] = useState();
+  const userCtx = useContext(userContext);
+  const uId = userCtx.id;
+
+  const { sendRequest } = useHttpRequest();
 
   useEffect(() => {
     const getPlaces = async () => {
-      const response = await getUserPlace(uId);
-      console.log(response);
+      try {
+        const response = await sendRequest(
+          `/api/places/user/${uId}`,
+          api.get,
 
-      setUserPlaces(response);
+          {
+            headers: { Authorization: `Bearer ${userCtx.token}` },
+          }
+        );
+        console.log(response);
+
+        setUserPlaces(response.places);
+      } catch (err) {
+        console.log(err.response.data.message);
+      }
     };
     getPlaces();
-  }, [setUserPlaces, userId]);
+  }, [setUserPlaces, uId]);
 
-  return <PlaceList items={userPlaces} />;
+  return <PlaceList items={userPlaces ? userPlaces : false} />;
 };
 
 export default UserPlaces;

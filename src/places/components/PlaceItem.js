@@ -24,6 +24,7 @@ const PlaceItem = (props) => {
   const deleteHandler = async () => {
     try {
       const response = await sendRequest(`/api/places/${props.id}`, api.delete);
+
       console.log(response);
 
       setIsSubmitted(true);
@@ -32,7 +33,7 @@ const PlaceItem = (props) => {
         setIsSubmitted(false);
       }, 5000);
     } catch (err) {
-      console.log(err);
+      console.log(err.response.data.message);
     }
   };
 
@@ -101,7 +102,7 @@ const PlaceItem = (props) => {
       <li className={style['place-item']}>
         <Card className={style['place-item__content']}>
           <div className={style['place-item__image']}>
-            <img src={props.image} alt={props.title} />
+            <img src={props.image.file} alt={props.title} />
           </div>
 
           <div className={style['place-item__info']}>
