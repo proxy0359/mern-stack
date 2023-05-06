@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Buttons';
@@ -13,6 +13,9 @@ import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import api from '../../api/server';
 import { getPlace } from '../../api/getPlace';
 import './PlaceForm.css';
+
+import { userContext } from '../../shared/context/user-context';
+
 let runSetFormData = false;
 
 const UpdatePlace = () => {
@@ -20,6 +23,8 @@ const UpdatePlace = () => {
   const [place, setPlace] = useState({});
 
   const placeId = useParams().placeId;
+
+  const userCtx = useContext(userContext);
 
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -78,10 +83,15 @@ const UpdatePlace = () => {
     const description = formState.inputs.description.value;
 
     try {
-      const response = await sendRequest(`/api/places/${placeId}`, api.patch, {
-        title,
-        description,
-      });
+      const response = await sendRequest(
+        `/api/places/${placeId}`,
+        api.patch,
+        {
+          title,
+          description,
+        },
+        { headers: { Authorization: `Bearer ${userCtx.token}` } }
+      );
 
       // TIMER FOR ALERTS
       setIsSubmitted(true);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import style from './PlaceItem.module.css';
 import Card from '../../shared/components/UIElements/Card';
 import Button from '../../shared/components/FormElements/Buttons';
@@ -8,11 +8,14 @@ import { useHttpRequest } from '../../shared/hooks/httpRequestHook';
 import api from './../../api/server';
 import Spinner from '../../shared/components/loading/Spinner';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import { userContext } from '../../shared/context/user-context';
 
 const PlaceItem = (props) => {
   const [showMap, setShowMap] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const userCtx = useContext(userContext);
 
   const mapHandler = () => setShowMap((show) => !show);
 
@@ -23,7 +26,11 @@ const PlaceItem = (props) => {
   // DELETE PLACE HANDLER
   const deleteHandler = async () => {
     try {
-      const response = await sendRequest(`/api/places/${props.id}`, api.delete);
+      const response = await sendRequest(
+        `/api/places/${props.id}`,
+        api.delete,
+        { headers: { Authorization: `Bearer ${userCtx.token}` } }
+      );
 
       console.log(response);
 
